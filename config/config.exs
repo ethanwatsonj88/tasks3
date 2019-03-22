@@ -12,7 +12,7 @@ config :tasks3,
 
 # Configures the endpoint
 config :tasks3, Tasks3Web.Endpoint,
-  url: [host: "localhost"],
+  url: [host: "tasks3.plasticnapkin.com"],
   secret_key_base: "lNVaoadyWAXW/EuZ/KQ9nYF9iL4gQu2CeZDdYMcbEfr7UZsYaFZGmz4/waYlRdyw",
   render_errors: [view: Tasks3Web.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Tasks3.PubSub, adapter: Phoenix.PubSub.PG2]
