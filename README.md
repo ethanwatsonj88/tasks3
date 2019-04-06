@@ -1,5 +1,8 @@
 # Tasks3
 
+username: ethan@example.com
+pass: pass1
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
