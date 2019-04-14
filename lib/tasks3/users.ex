@@ -60,6 +60,7 @@ defmodule Tasks3.Users do
 
   """
   def create_user(attrs \\ %{}) do
+    attrs = Map.put(attrs, "password_hash", Argon2.hash_pwd_salt(Map.get(attrs, "password_hash")))
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
