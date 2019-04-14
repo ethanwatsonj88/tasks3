@@ -14,6 +14,7 @@ class Root extends React.Component {
 		super(props);
 		this.state = {
 			login_form: {email: "", password: ""},
+			task_form: {description: "", title: "", user_id: 0, time_spent: 0},
 			session: null,
 			tasks: props.tasks,
 			users: [],
@@ -48,12 +49,54 @@ class Root extends React.Component {
       }
     });
   }
+	
+	register_user() {
+		$.ajax("/api/v1/users", {
+			method: "post",
+			dataType: "json",
+			data: { 
+				user: {
+					email: this.state.login_form.email,
+					password_hash: this.state.login_form.password
+				}
+			},
+			success: function (data) {
+				console.log(data);
+			}
+		});
+	}
+
+	create_task() {
+		$.ajax("/api/v1/tasks", {
+			method: "post",
+			dataType: "json",
+			data: { 
+				task: {
+					user_id: this.state.task_form.user_id,
+					description: this.state.task_form.description,
+					time_spent: this.state.task_form.time_spent,
+					title: this.state.task_form.title
+				}
+			},
+			success: function (data) {
+				console.log(data);
+			}
+		});
+	
+	}
 
   update_login_form(data) {
     let form1 = _.assign({}, this.state.login_form, data);
     let state1 = _.assign({}, this.state, { login_form: form1 });
     this.setState(state1);
   }
+
+	update_task_form(data) {
+    let form1 = _.assign({}, this.state.task_form, data);
+    let state1 = _.assign({}, this.state, { task_form: form1 });
+    this.setState(state1);
+  }
+
 
 	fetch_users() {
     $.ajax("/api/v1/users", {
@@ -74,7 +117,7 @@ class Root extends React.Component {
 				<div>
       		<Header session={this.state.session} root={this} />
 					<Route path="/" exact={true} render={() =>
-						<TaskList tasks={this.state.tasks} />
+						<TaskList tasks={this.state.tasks} root={this} />
 					} />
 					<Route path="/users" exact={true} render={() =>
 						<UserList users={this.state.users} />
@@ -94,6 +137,7 @@ function Header(props) {
       <input type="password" placeholder="password"
              onChange={(ev) => root.update_login_form({password: ev.target.value})} />
       <button className="btn btn-secondary" onClick={() => root.login()}>Login</button>
+			<button className="btn btn-secondary" onClick={() => root.register_user()}>Register</button>
     </div>;
   }
   else {
@@ -120,8 +164,22 @@ function Header(props) {
 
 function TaskList(props) {
   let tasks = _.map(props.tasks, (t) => <Task key={t.id} task={t} />);
+	let root = props.root;
   return <div className="row">
     {tasks}
+		<div>
+		<input type="title" placeholder="title" 
+    	onChange={(ev) => root.update_task_form({title: ev.target.value})} />
+		<input type="description" placeholder="description" 
+    	onChange={(ev) => root.update_task_form({description: ev.target.value})} />
+		<input type="user_id" placeholder="user_id" 
+    	onChange={(ev) => root.update_task_form({user_id: ev.target.value})} />
+		<input type="time_spent" placeholder="time_spent" 
+    	onChange={(ev) => root.update_task_form({time_spent: ev.target.value})} />
+		</div>
+
+
+		<button className="btn btn-secondary" onClick={() => root.create_task()}>Add new task</button>
   </div>;
 }
 

@@ -16,8 +16,8 @@ defmodule Tasks3.Tasks.Task do
   @doc false
   def changeset(task, attrs) do
     task
-    |> cast(attrs, [:title, :description, :completed, :time_spent])
-    |> validate_required([:title, :description, :completed, :time_spent])
+    |> cast(attrs, [:title, :description, :time_spent, :user_id])
+    |> validate_required([:title, :description, :time_spent])
 		|> unique_constraint(:user_id, name: :tasks_user_id_index)
   end
 end
