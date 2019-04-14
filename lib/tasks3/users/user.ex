@@ -17,6 +17,6 @@ defmodule Tasks3.Users.User do
     user
     |> cast(attrs, [:email, :password_hash, :manager])
     |> validate_required([:email, :password_hash])
-		|> unique_constraint(:email)
+    |> unique_constraint(:email)
   end
 end
